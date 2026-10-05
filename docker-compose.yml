@@ -1,0 +1,35 @@
+services:
+  # Nginx web server - serves the custom page in /home/labuser/site
+  web:
+    image: nginx
+    ports:
+      - "8080:80"                                   # VM port 8080 -> container port 80
+    volumes:
+      - /home/labuser/site:/usr/share/nginx/html:ro  # bind mount, read-only
+    restart: unless-stopped
+
+  # PostgreSQL database - data lives in the existing pgdata volume
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_PASSWORD: "labpass"                  # lab placeholder only
+    volumes:
+      - pgdata:/var/lib/postgresql/data             # named volume = persistent data
+    restart: unless-stopped
+
+  # Pi-hole DNS filter - DNS on 1053 (5353 is used by Avahi), web UI on 8081
+  pihole:
+    image: pihole/pihole:latest
+    ports:
+      - "1053:53/udp"
+      - "8081:80/tcp"
+    environment:
+      FTLCONF_webserver_api_password: "changeme"    # lab placeholder only
+      FTLCONF_dns_listeningMode: "all"              # needed on Docker's bridge network
+    volumes:
+      - ./etc-pihole:/etc/pihole
+    restart: unless-stopped
+
+volumes:
+  pgdata:
+    external: true    # reuse the pgdata volume created earlier instead of making a new one
