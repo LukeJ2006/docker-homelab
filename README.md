@@ -65,7 +65,7 @@ The Pi-hole Query Log confirms `doubleclick.net` was blocked, with about 72,000 
 ## Screenshots
 
 ![Pi-hole Query Log showing blocked domain](screenshots/pihole-query-log.png)
-![dig result returning 0.0.0.0](screenshots/terminal-tests.png)
+![Terminal: all containers running, database rows after recreation, and dig returning 0.0.0.0](screenshots/terminal-tests.png)
 ![Nginx serving the custom page](screenshots/nginx-page.png)
 
 ## Troubleshooting Log
